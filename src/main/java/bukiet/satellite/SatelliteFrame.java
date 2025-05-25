@@ -13,7 +13,7 @@ public class SatelliteFrame  extends JFrame {
         frame.setVisible(true);
 
         String apiKey = new com.andrewoid.apikeys.ApiKey().get();
-        SatelliteService service = RetrofitClient.createService();
+        SatelliteService service = SatelliteClient.createService();
         SatelliteController controller = new SatelliteController(service, imageLabel, apiKey);
 
         controller.display();
