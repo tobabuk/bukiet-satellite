@@ -7,6 +7,7 @@ import java.awt.*;
 public class SatelliteFrame  extends JFrame {
 
     SatelliteService service;
+
     public SatelliteFrame() {
         setTitle("Satellite Map");
         setSize(500, 500);
