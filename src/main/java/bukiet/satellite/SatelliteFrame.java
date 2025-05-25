@@ -1,5 +1,4 @@
-package bukiet.satellite;// example: SatelliteFrame.java
-
+package bukiet.satellite;
 
 
 import javax.swing.*;
