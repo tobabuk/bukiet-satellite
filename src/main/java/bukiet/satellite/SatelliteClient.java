@@ -7,7 +7,7 @@ import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 public class SatelliteClient {
 
 
-            public static SatelliteService createService() {
+            public  SatelliteService createService() {
                 OkHttpClient client = new OkHttpClient.Builder().build();
 
                 Retrofit retrofit = new Retrofit.Builder()

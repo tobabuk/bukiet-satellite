@@ -1,11 +1,13 @@
 ### Project Name
 
-Add a description
+This project will get the most recent satellite 
+images for a given location and the user should be
+able to move the map and get the surrounding satellite images
 
 ### Screenshots
 
-Put screenshots here
+![img.png](img.png)
 
 #### Links
 
-- [name](http://url)
+- [Satellite Map Viewer](https://github.com/tobabuk/bukiet-satellite/)
