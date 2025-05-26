@@ -23,10 +23,12 @@ public class SatelliteController {
 
     }
 
-    public void display() {
+
+
+    public void display(double lat, double lon, String date) {
         try {
             ResponseBody body = service.satelliteNow(
-                    40.7128, -74.0060, "2025-05-17", 0.2, apiKey
+                    lat, lon, date, 0.2, apiKey
             ).blockingGet();
 
             if (body != null) {
