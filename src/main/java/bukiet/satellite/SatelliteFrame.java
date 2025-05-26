@@ -59,7 +59,9 @@ public class SatelliteFrame extends JFrame {
                 dragStart = e.getPoint();
                 controller.display(lat, lon, date);
             }
-        });}
+        });
+    }
+
     public static void main(String[] args) {
         new SatelliteFrame().setVisible(true);
     }
