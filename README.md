@@ -10,4 +10,4 @@ able to move the map and get the surrounding satellite images
 
 #### Links
 
-- [Satellite Map Viewer](https://github.com/tobabuk/bukiet-satellite/)
+- [NASA API Documentation ](https://api.nasa.gov/)

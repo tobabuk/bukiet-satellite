@@ -7,10 +7,6 @@ public class SatelliteResponse {
  String url;
  String id;
 
-
-
-
-
         }
 
 

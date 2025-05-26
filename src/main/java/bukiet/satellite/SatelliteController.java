@@ -6,8 +6,10 @@ import okhttp3.ResponseBody;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
+import java.net.URL;
 
 public class SatelliteController {
     private final JLabel imageLabel;
@@ -18,29 +20,29 @@ public class SatelliteController {
         this.service = service;
         this.imageLabel = imageLabel;
         this.apiKey = apiKey;
+
     }
 
     public void display() {
-        Disposable disposable = service.satelliteNow(40.7128, -74.0060, "2025-05-17", 0.2, apiKey)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.from(SwingUtilities::invokeLater))
-                .subscribe(
-                        responseBody -> {
-                            try (InputStream inputStream = responseBody.byteStream()) {
-                                BufferedImage image = ImageIO.read(inputStream);
-                                if (image != null) {
-                                    imageLabel.setIcon(new ImageIcon(image));
-                                } else {
-                                    System.err.println("Could not decode image.");
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        },
-                        throwable -> {
-                            System.err.println("Error fetching satellite image:");
-                            throwable.printStackTrace();
-                        }
-                );
+        try {
+            ResponseBody body = service.satelliteNow(
+                    40.7128, -74.0060, "2025-05-17", 0.2, apiKey
+            ).blockingGet();
+
+            if (body != null) {
+                try (InputStream inputStream = body.byteStream()) {
+                    BufferedImage image = ImageIO.read(inputStream);
+                    if (image != null) {
+                        ImageIcon thumbnail = new ImageIcon(image);
+                        SwingUtilities.invokeLater(() -> imageLabel.setIcon(thumbnail));
+                    } else {
+                        System.err.println("Can't download image.");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }
