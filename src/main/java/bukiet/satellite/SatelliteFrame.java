@@ -53,8 +53,7 @@ public class SatelliteFrame extends JFrame {
             public void mouseDragged(MouseEvent e) {
                 int x = e.getX() - dragStart.x;
                 int y = e.getY() - dragStart.y;
-                lat = Math.max(-85, Math.min(85, lat));
-                lon = ((lon + 180) % 360 + 360) % 360 - 180;
+
                 lat -= y * 0.01;
                 lon += x * 0.01;
 
