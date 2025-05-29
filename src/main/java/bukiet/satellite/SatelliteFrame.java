@@ -10,7 +10,7 @@ public class SatelliteFrame extends JFrame {
     private final JLabel imageLabel = new JLabel();
     private double lat = 40.7128;
     private double lon = -74.0060;
-    private final String date = "2025-05-17";
+    private final String date = "2024-05-17";
     private Point dragStart;
 
     private final SatelliteService service;
