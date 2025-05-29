@@ -14,7 +14,8 @@ public interface SatelliteService {
             @Query("lon") double lon,
             @Query("date") String date,
             @Query("dim") double dim,
-            @Query("api_key") String apikey
+            @Query("api_key") String apikey,
+            @Query("cloud_score") boolean cloudScore
 
 
     );

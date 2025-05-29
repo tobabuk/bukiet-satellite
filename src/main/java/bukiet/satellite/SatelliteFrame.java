@@ -28,7 +28,7 @@ public class SatelliteFrame extends JFrame {
 
 
         setTitle("Satellite Map");
-        setSize(600, 600);
+        setSize(900, 900);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
@@ -41,6 +41,7 @@ public class SatelliteFrame extends JFrame {
 
 
         imagePanel.addMouseListener(new MouseAdapter() {
+
             @Override
             public void mousePressed(MouseEvent e) {
                 dragStart = e.getPoint();
@@ -52,7 +53,8 @@ public class SatelliteFrame extends JFrame {
             public void mouseDragged(MouseEvent e) {
                 int x = e.getX() - dragStart.x;
                 int y = e.getY() - dragStart.y;
-
+                lat = Math.max(-85, Math.min(85, lat));
+                lon = ((lon + 180) % 360 + 360) % 360 - 180;
                 lat -= y * 0.01;
                 lon += x * 0.01;
 

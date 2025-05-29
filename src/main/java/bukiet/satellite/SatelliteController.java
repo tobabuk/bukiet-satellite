@@ -28,8 +28,9 @@ public class SatelliteController {
     public void display(double lat, double lon, String date) {
         try {
             ResponseBody body = service.satelliteNow(
-                    lat, lon, date, 0.2, apiKey
+                    lat, lon, date, 0.1, apiKey, false
             ).blockingGet();
+            System.out.printf("Requesting image at lat=%.4f, lon=%.4f, date=%s%n", lat, lon, date);
 
             if (body != null) {
                 try (InputStream inputStream = body.byteStream()) {
