@@ -6,15 +6,15 @@ import okhttp3.ResponseBody;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
-import java.net.URL;
 
 public class SatelliteController {
+
     private final JLabel imageLabel;
     private final SatelliteService service;
     private final String apiKey;
+    private Disposable currentRequest;
 
     public SatelliteController(SatelliteService service, JLabel imageLabel, String apiKey) {
         this.service = service;
@@ -24,28 +24,33 @@ public class SatelliteController {
     }
 
 
-
     public void display(double lat, double lon, String date) {
-        try {
-            ResponseBody body = service.satelliteNow(
-                    lat, lon, date, 0.1, apiKey, false
-            ).blockingGet();
-            System.out.printf("Requesting image at lat=%.4f, lon=%.4f, date=%s%n", lat, lon, date);
 
-            if (body != null) {
-                try (InputStream inputStream = body.byteStream()) {
-                    BufferedImage image = ImageIO.read(inputStream);
-                    if (image != null) {
-                        ImageIcon thumbnail = new ImageIcon(image);
-                        SwingUtilities.invokeLater(() -> imageLabel.setIcon(thumbnail));
-                    } else {
-                        System.err.println("Can't download image.");
-                    }
-                }
+        currentRequest = service.satelliteNow(lat, lon, date, 0.1, apiKey, false)
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                        body -> loadImage(body, apiKey),
+                        error -> SwingUtilities.invokeLater(() -> {
+                            imageLabel.setText("Error loading image");
+                            System.err.println("Request failed: " + error.getMessage());
+                        })
+                );
+    }
+
+    private void loadImage(ResponseBody body, String apiKey) {
+        try (InputStream stream = body.byteStream()) {
+            BufferedImage image = ImageIO.read(stream);
+            if (image != null) {
+                ImageIcon icon = new ImageIcon(image);
+                SwingUtilities.invokeLater(() -> {
+                    imageLabel.setIcon(icon);
+                    imageLabel.setText("");
+                });
             }
         } catch (Exception e) {
+            SwingUtilities.invokeLater(() -> imageLabel.setText("Failed to load"));
             e.printStackTrace();
         }
-
     }
+
 }
