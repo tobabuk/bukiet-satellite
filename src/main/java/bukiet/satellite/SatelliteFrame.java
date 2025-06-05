@@ -30,7 +30,7 @@ public class SatelliteFrame extends JFrame {
         service = client.createService();
 
 
-        controller = new SatelliteController(service, imageLabel, apiKey,view);
+        controller = new SatelliteController(service, imageLabel, apiKey, view);
 
         setTitle("Satellite Map");
         setSize(900, 900);

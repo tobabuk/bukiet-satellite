@@ -21,7 +21,7 @@ public class SatelliteController {
     private final double dim = .025;
         private SatelliteView view;
     ImageIcon[] icon = new ImageIcon[3];
-    int number = 0 ;
+    int number = 0;
     private BufferedImage[] images = new BufferedImage[3];
 
 
@@ -32,7 +32,7 @@ public class SatelliteController {
         this.view = view;
     }
 
-        public void display ( double lat, double lon) {
+        public void display(double lat, double lon) {
             currentRequest = service.satelliteNow(lat, lon, dim, apiKey, false)
                     .subscribeOn(Schedulers.io())
                     .subscribe(
@@ -60,8 +60,7 @@ public class SatelliteController {
                                 imageLabel.setText("Error loading image");
                                 System.err.println("Request failed: " + error.getMessage());
                             })
-                    );
-        }
+                    );}
 
 
     private void loadImage(ResponseBody body, int count) {
