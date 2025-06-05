@@ -15,7 +15,7 @@ class SatelliteServiceTest {
         ApiKey apikey = new ApiKey();
         String keyString = apikey.get();
         ResponseBody body = service
-                .satelliteNow(40.7128, -74.0060, "2025-05-17", 0.2, keyString, false)
+                .satelliteNow(40.7128, -74.0060, 0.2, keyString, false)
                 .blockingGet();
 
         assertNotNull(body);
