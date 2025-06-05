@@ -73,11 +73,7 @@ public class SatelliteController {
                 SwingUtilities.invokeLater(() -> {
                     view.setImage(image, count);
                 });
-        }
-
-
-
-    catch (Exception e) {
+        } catch (Exception e) {
             SwingUtilities.invokeLater(() -> imageLabel.setText("Failed to load"));
             e.printStackTrace();
         }
