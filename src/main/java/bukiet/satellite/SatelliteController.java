@@ -70,9 +70,9 @@ public class SatelliteController {
                 images[count] = image;
                 number++;
             }
-            SwingUtilities.invokeLater(() -> {
-                view.setImage(image, count);
-            });
+                SwingUtilities.invokeLater(() -> {
+                    view.setImage(image, count);
+                });
         }
 
 
