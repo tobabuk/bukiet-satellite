@@ -73,7 +73,8 @@ public class SatelliteController {
             }
             SwingUtilities.invokeLater(() -> {
                 view.setImage(image, count);
-            }); }
+            });
+        }
 
 
 
