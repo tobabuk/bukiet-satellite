@@ -60,7 +60,8 @@ public class SatelliteController {
                                 imageLabel.setText("Error loading image");
                                 System.err.println("Request failed: " + error.getMessage());
                             })
-                    );}
+                    );
+    }
 
 
     private void loadImage(ResponseBody body, int count) {
@@ -72,9 +73,7 @@ public class SatelliteController {
             }
             SwingUtilities.invokeLater(() -> {
                 view.setImage(image, count);
-            });
-
-        }
+            }); }
 
 
 

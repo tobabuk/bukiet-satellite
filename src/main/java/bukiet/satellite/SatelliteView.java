@@ -14,7 +14,7 @@ public class SatelliteView extends JComponent {
        repaint();
     }
 
-    public BufferedImage getImage(int ind){
+    public BufferedImage getImage(int ind) {
         return images[ind];
     }
 
