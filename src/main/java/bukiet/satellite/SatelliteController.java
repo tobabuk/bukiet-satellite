@@ -19,8 +19,7 @@ public class SatelliteController {
     private Disposable leftRequest;
     private Disposable rightRequest;
     private final double dim = .025;
-        private SatelliteView view;
-    ImageIcon[] icon = new ImageIcon[3];
+    private SatelliteView view;
     int number = 0;
     private BufferedImage[] images = new BufferedImage[3];
 
