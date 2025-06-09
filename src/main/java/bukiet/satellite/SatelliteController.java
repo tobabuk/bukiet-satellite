@@ -6,6 +6,7 @@ import okhttp3.ResponseBody;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -20,9 +21,8 @@ public class SatelliteController {
     private Disposable rightRequest;
     private final double dim = .025;
     private SatelliteView view;
-    int number = 0;
-    private BufferedImage[] images = new BufferedImage[3];
-
+    private BufferedImage[] images = new BufferedImage[9];
+    Image scaledImage;
 
     public SatelliteController(SatelliteService service, JLabel imageLabel, String apiKey, SatelliteView view) {
         this.service = service;
@@ -32,46 +32,37 @@ public class SatelliteController {
     }
 
         public void display(double lat, double lon) {
-            currentRequest = service.satelliteNow(lat, lon, dim, apiKey, false)
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(
-                            body -> loadImage(body, 1),
-                            error -> SwingUtilities.invokeLater(() -> {
-                                imageLabel.setText("Error loading image");
-                                System.err.println("Request failed: " + error.getMessage());
-                            })
-                    );
-            leftRequest = service.satelliteNow(lat - (dim / 2), lon, dim, apiKey, false)
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(
-                            body -> loadImage(body, 0),
-                            error -> SwingUtilities.invokeLater(() -> {
-                                imageLabel.setText("Error loading image");
-                                System.err.println("Request failed: " + error.getMessage());
-                            })
-                    );
+            int number = 0;
 
-            rightRequest = service.satelliteNow(lat + (dim / 2), lon, dim, apiKey, false)
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(
-                            body -> loadImage(body, 2),
-                            error -> SwingUtilities.invokeLater(() -> {
-                                imageLabel.setText("Error loading image");
-                                System.err.println("Request failed: " + error.getMessage());
-                            })
-                    );
-    }
-
-
+            for (int latstart = 0; latstart < 3; latstart++) {
+                for (int lonstart = 0; lonstart < 3; lonstart++) {
+                    double newLat = lat + (latstart * dim);
+                    double newLon = lon + (lonstart * dim);
+                    final int count = number;
+                    currentRequest = service.satelliteNow(newLat, newLon, dim, apiKey, false)
+                            .subscribeOn(Schedulers.io())
+                            .subscribe(
+                                    body -> loadImage(body, count),
+                                    error -> SwingUtilities.invokeLater(() -> {
+                                        imageLabel.setText("Error loading image");
+                                        System.err.println("Request failed: " + error.getMessage());
+                                    })
+                            );
+                    number++;
+                }}
+        }
+//resize to 256x256
+    //
     private void loadImage(ResponseBody body, int count) {
         try (InputStream stream = body.byteStream()) {
             BufferedImage image = ImageIO.read(stream);
             if (image != null) {
                 images[count] = image;
-                number++;
+               Image scaledImage = image.getScaledInstance(200, -1, Image.SCALE_DEFAULT);
+
             }
                 SwingUtilities.invokeLater(() -> {
-                    view.setImage(image, count);
+                    view.setImage((BufferedImage) scaledImage, count);
                 });
         } catch (Exception e) {
             SwingUtilities.invokeLater(() -> imageLabel.setText("Failed to load"));

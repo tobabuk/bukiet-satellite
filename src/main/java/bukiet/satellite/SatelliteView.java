@@ -5,10 +5,12 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class SatelliteView extends JComponent {
-    private BufferedImage[] images = new BufferedImage[3];
-
-
-
+    private BufferedImage[] images = new BufferedImage[9];
+    int height = getHeight();
+    int width = getWidth();
+    int offset = 300;
+//x, y offset - draw based off that
+    //as you drag change offset
     public void setImage(BufferedImage image, int ind) {
        images[ind] = image;
        repaint();
@@ -21,8 +23,8 @@ public class SatelliteView extends JComponent {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        for (BufferedImage image : images) {
-        g.drawImage(image, 0, 0, null);
+        for (int i = 0 ; i < images.length ; i++) {
+            g.drawImage(images[i], i * offset, 0 , null);
         }
     }
 }

@@ -43,12 +43,7 @@ public class SatelliteFrame extends JFrame {
 
         JPanel imagePanel = new JPanel(new BorderLayout());
         imagePanel.add(imageLabel, BorderLayout.CENTER);
-        latLabel.setText(String.format("Current Latitude: %.4f", lat));
-        lonLabel.setText(String.format("Current Longitude: %.4f", lon));
-        JPanel coordPanel = new JPanel(new GridLayout(2, 1));
-        coordPanel.add(latLabel);
-        coordPanel.add(lonLabel);
-        imagePanel.add(coordPanel, BorderLayout.SOUTH);
+
         JPanel inputPanel = new JPanel(new FlowLayout());
         inputPanel.add(new JLabel("Lat:"));
         inputPanel.add(latField);
@@ -60,7 +55,7 @@ public class SatelliteFrame extends JFrame {
         add(view, BorderLayout.CENTER);
 
 
-        imagePanel.addMouseListener(new MouseAdapter() {
+        view.addMouseListener(new MouseAdapter() {
 
             @Override
             public void mousePressed(MouseEvent e) {
@@ -68,7 +63,7 @@ public class SatelliteFrame extends JFrame {
             }
         });
 
-        imagePanel.addMouseMotionListener(new MouseAdapter() {
+        view.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
                 int x = e.getX() - dragStart.x;
@@ -80,12 +75,10 @@ public class SatelliteFrame extends JFrame {
                 newLat = Math.max(-85.0, Math.min(85.0, newLat));
                 newLon = ((newLon + 180.0) % 360.0 + 360.0) % 360.0 - 180.0;
 
-                if (Math.abs(newLat - lat) > 0.0001 || Math.abs(newLon - lon) > 0.0001) {
+                if (Math.abs(newLat - lat) > 0.1 || Math.abs(newLon - lon) > 0.1) {
                     lat = newLat;
                     lon = newLon;
 
-                    latLabel.setText(String.format("Current Latitude: %.4f", lat));
-                    lonLabel.setText(String.format("Current Longitude: %.4f", lon));
                     dragStart = e.getPoint();
                     controller.display(lat, lon);
                 }
@@ -102,12 +95,10 @@ public class SatelliteFrame extends JFrame {
                 lat = Math.max(-85.0, Math.min(85.0, lat));
                 lon = ((lon + 180.0) % 360.0 + 360.0) % 360.0 - 180.0;
 
-                latLabel.setText(String.format("Current Latitude: %.4f", lat));
-                lonLabel.setText(String.format("Current Longitude: %.4f", lon));
 
                 controller.display(lat, lon);
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Invalid latitude or longitude input.");
+                JOptionPane.showMessageDialog(this, "Invalid latitude or longitude input."+ ex.getStackTrace());
             }
         });
 
