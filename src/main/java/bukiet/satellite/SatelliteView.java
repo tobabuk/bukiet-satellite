@@ -26,7 +26,7 @@ public class SatelliteView extends JComponent {
         super.paintComponent(g);
 
         for (int row = 0; row < 3; row++) {
-            for (int col = 0; col < 3 ; col++) {
+            for (int col = 0; col < 3; col++) {
                 int x = col * offset;
                 int y = row * offset;
                 g.drawImage(images[row][col], x, y, null);

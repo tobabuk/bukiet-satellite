@@ -34,10 +34,10 @@ public class SatelliteController {
         public void display(double lat, double lon) {
             int number = 0;
 
-            for ( row = 0; row < 3; row++) {
+            for (row = 0; row < 3; row++) {
 
-                for ( col = 0; col < 3; col++) {
-                    int offsetRow = row = 1;
+                for (col = 0; col < 3; col++) {
+                    int offsetRow = row - 1;
                     int offsetCol = col - 1;
                     double newLat = lat + (offsetRow * dim);
                     double newLon = lon + (offsetCol * dim);
@@ -73,13 +73,13 @@ public class SatelliteController {
                 Graphics2D g2d = bufferedScaled.createGraphics();
                 g2d.drawImage(scaledImage, 0, 0, null);
                 g2d.dispose();
-                images[row][col]= bufferedScaled;
+                images[row][col] = bufferedScaled;
 
                 SwingUtilities.invokeLater(() -> {
-                    view.setImage( bufferedScaled, row, col);
+                    view.setImage(bufferedScaled, row, col);
                 });
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             SwingUtilities.invokeLater(() -> imageLabel.setText("Failed to load"));
             e.printStackTrace();
         }
