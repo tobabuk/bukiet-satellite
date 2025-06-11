@@ -66,39 +66,31 @@ public class SatelliteFrame extends JFrame {
         view.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
+                int offset = 330;
                 int x = e.getX() - dragStart.x;
                 int y = e.getY() - dragStart.y;
 
-                double newLat = lat - y * 0.01;
-                double newLon = lon + x * 0.01;
+                double newLat = lat - y * offset;
+                double newLon = lon + x * offset;
 
-                newLat = Math.max(-85.0, Math.min(85.0, newLat));
-                newLon = ((newLon + 180.0) % 360.0 + 360.0) % 360.0 - 180.0;
 
-                if (Math.abs(newLat - lat) > 0.1 || Math.abs(newLon - lon) > 0.1) {
-                    lat = newLat;
-                    lon = newLon;
 
                     dragStart = e.getPoint();
                     controller.display(lat, lon);
                 }
 
-            }
+
         });
 
         goButton.addActionListener(e -> {
             try {
                 lat = Double.parseDouble(latField.getText());
                 lon = Double.parseDouble(lonField.getText());
-
-
                 lat = Math.max(-85.0, Math.min(85.0, lat));
                 lon = ((lon + 180.0) % 360.0 + 360.0) % 360.0 - 180.0;
-
-
                 controller.display(lat, lon);
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Invalid latitude or longitude input."+ ex.getStackTrace());
+                JOptionPane.showMessageDialog(this, "Invalid latitude or longitude input." + ex.getStackTrace());
             }
         });
 

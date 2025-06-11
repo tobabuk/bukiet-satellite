@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
+import java.nio.Buffer;
 import java.util.Arrays;
 
 public class SatelliteController {
@@ -17,12 +18,11 @@ public class SatelliteController {
     private final SatelliteService service;
     private final String apiKey;
     private Disposable currentRequest;
-    private Disposable leftRequest;
-    private Disposable rightRequest;
     private final double dim = .025;
     private SatelliteView view;
-    private BufferedImage[] images = new BufferedImage[9];
-    Image scaledImage;
+    private BufferedImage[][] images = new BufferedImage[3][3];
+    private int row;
+    private int col;
 
     public SatelliteController(SatelliteService service, JLabel imageLabel, String apiKey, SatelliteView view) {
         this.service = service;
@@ -34,37 +34,52 @@ public class SatelliteController {
         public void display(double lat, double lon) {
             int number = 0;
 
-            for (int latstart = 0; latstart < 3; latstart++) {
-                for (int lonstart = 0; lonstart < 3; lonstart++) {
-                    double newLat = lat + (latstart * dim);
-                    double newLon = lon + (lonstart * dim);
+            for ( row = 0; row < 3; row++) {
+
+                for ( col = 0; col < 3; col++) {
+                    int offsetRow = row = 1;
+                    int offsetCol = col - 1;
+                    double newLat = lat + (offsetRow * dim);
+                    double newLon = lon + (offsetCol * dim);
                     final int count = number;
+                    final int c = col;
+                    final int r = row;
                     currentRequest = service.satelliteNow(newLat, newLon, dim, apiKey, false)
                             .subscribeOn(Schedulers.io())
                             .subscribe(
-                                    body -> loadImage(body, count),
+                                    body -> loadImage(body, count, r, c),
                                     error -> SwingUtilities.invokeLater(() -> {
                                         imageLabel.setText("Error loading image");
                                         System.err.println("Request failed: " + error.getMessage());
                                     })
                             );
                     number++;
-                }}
+                }
+            }
         }
-//resize to 256x256
-    //
-    private void loadImage(ResponseBody body, int count) {
+    //resize to 256x256
+
+    private void loadImage(ResponseBody body, int count, int row, int col) {
         try (InputStream stream = body.byteStream()) {
             BufferedImage image = ImageIO.read(stream);
             if (image != null) {
-                images[count] = image;
-               Image scaledImage = image.getScaledInstance(200, -1, Image.SCALE_DEFAULT);
+                Image scaledImage = null;
+                scaledImage = image.getScaledInstance(300, -1, Image.SCALE_DEFAULT);
+                BufferedImage bufferedScaled = new BufferedImage(
+                        scaledImage.getWidth(null),
+                        scaledImage.getHeight(null),
+                        BufferedImage.TYPE_INT_ARGB);
 
-            }
+                Graphics2D g2d = bufferedScaled.createGraphics();
+                g2d.drawImage(scaledImage, 0, 0, null);
+                g2d.dispose();
+                images[row][col]= bufferedScaled;
+
                 SwingUtilities.invokeLater(() -> {
-                    view.setImage((BufferedImage) scaledImage, count);
+                    view.setImage( bufferedScaled, row, col);
                 });
-        } catch (Exception e) {
+            }
+        }catch (Exception e) {
             SwingUtilities.invokeLater(() -> imageLabel.setText("Failed to load"));
             e.printStackTrace();
         }
