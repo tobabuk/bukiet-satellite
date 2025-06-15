@@ -66,18 +66,16 @@ public class SatelliteFrame extends JFrame {
         view.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                int offset = 330;
+                int offset = 300;
                 int x = e.getX() - dragStart.x;
                 int y = e.getY() - dragStart.y;
 
                 double newLat = lat - y * offset;
                 double newLon = lon + x * offset;
 
-
-
-                    dragStart = e.getPoint();
-                    controller.display(lat, lon);
-                }
+                dragStart = e.getPoint();
+                controller.display(newLat, newLon);
+            }
 
 
         });

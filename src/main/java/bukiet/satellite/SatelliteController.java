@@ -31,40 +31,39 @@ public class SatelliteController {
         this.view = view;
     }
 
-        public void display(double lat, double lon) {
-            int number = 0;
+    public void display(double oglat, double oglon) {
+        int number = 0;
 
-            for (row = 0; row < 3; row++) {
+        for (row = 0; row < 3; row++) {
 
-                for (col = 0; col < 3; col++) {
-                    int offsetRow = row - 1;
-                    int offsetCol = col - 1;
-                    double newLat = lat + (offsetRow * dim);
-                    double newLon = lon + (offsetCol * dim);
-                    final int count = number;
-                    final int c = col;
-                    final int r = row;
-                    currentRequest = service.satelliteNow(newLat, newLon, dim, apiKey, false)
-                            .subscribeOn(Schedulers.io())
-                            .subscribe(
-                                    body -> loadImage(body, count, r, c),
-                                    error -> SwingUtilities.invokeLater(() -> {
-                                        imageLabel.setText("Error loading image");
-                                        System.err.println("Request failed: " + error.getMessage());
-                                    })
-                            );
-                    number++;
-                }
+            for (col = 0; col < 3; col++) {
+                int offsetRow = row - 1;
+                int offsetCol = col - 1;
+                double lat = oglat + (offsetRow * dim);
+                double lon = oglon + (offsetCol * dim);
+                final int count = number;
+                final int c = col;
+                final int r = row;
+                currentRequest = service.satelliteNow(lat, lon, dim, apiKey, false)
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(
+                                body -> loadImage(body,  r, c),
+                                error -> SwingUtilities.invokeLater(() -> {
+                                    imageLabel.setText("Error loading image");
+                                    System.err.println("Request failed: " + error.getMessage());
+                                })
+                        );
+                number++;
             }
         }
-    //resize to 256x256
+    }
 
-    private void loadImage(ResponseBody body, int count, int row, int col) {
+    private void loadImage(ResponseBody body,int row, int col) {
         try (InputStream stream = body.byteStream()) {
             BufferedImage image = ImageIO.read(stream);
             if (image != null) {
                 Image scaledImage = null;
-                scaledImage = image.getScaledInstance(300, -1, Image.SCALE_DEFAULT);
+                scaledImage = image.getScaledInstance(256, -1, Image.SCALE_DEFAULT);
                 BufferedImage bufferedScaled = new BufferedImage(
                         scaledImage.getWidth(null),
                         scaledImage.getHeight(null),
