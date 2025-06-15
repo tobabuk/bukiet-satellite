@@ -7,8 +7,8 @@ import java.awt.image.BufferedImage;
 public class SatelliteView extends JComponent {
     private BufferedImage[][] images = new BufferedImage[3][3];
     int offset = 300;
-    int xOffset = -getWidth()/3;
-    int yOffset = -getHeight()/3;
+    int xOffset = -getWidth() / 3;
+    int yOffset = -getHeight() / 3;
     //x, y offset - draw based off that
     //as you drag change offset
 

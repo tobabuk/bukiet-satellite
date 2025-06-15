@@ -41,7 +41,6 @@ public class SatelliteController {
                 int offsetCol = col - 1;
                 double lat = oglat + (offsetRow * dim);
                 double lon = oglon + (offsetCol * dim);
-                final int count = number;
                 final int c = col;
                 final int r = row;
                 currentRequest = service.satelliteNow(lat, lon, dim, apiKey, false)
@@ -53,17 +52,17 @@ public class SatelliteController {
                                     System.err.println("Request failed: " + error.getMessage());
                                 })
                         );
-                number++;
+
             }
         }
     }
 
-    private void loadImage(ResponseBody body,int row, int col) {
+    private void loadImage(ResponseBody body, int row, int col) {
         try (InputStream stream = body.byteStream()) {
             BufferedImage image = ImageIO.read(stream);
             if (image != null) {
-                Image scaledImage = null;
-                scaledImage = image.getScaledInstance(256, -1, Image.SCALE_DEFAULT);
+
+                Image scaledImage = image.getScaledInstance(256, -1, Image.SCALE_DEFAULT);
                 BufferedImage bufferedScaled = new BufferedImage(
                         scaledImage.getWidth(null),
                         scaledImage.getHeight(null),
