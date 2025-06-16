@@ -32,7 +32,6 @@ public class SatelliteController {
     }
 
     public void display(double oglat, double oglon) {
-        int number = 0;
 
         for (row = 0; row < 3; row++) {
 
@@ -83,4 +82,11 @@ public class SatelliteController {
         }
     }
 
+    public void Move(int x, int y)
+    {
+      view.xOffset += x ;
+      view.yOffset += y;
+      view.repaint();
+
+    }
 }

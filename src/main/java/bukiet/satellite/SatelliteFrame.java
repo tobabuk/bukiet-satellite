@@ -74,7 +74,7 @@ public class SatelliteFrame extends JFrame {
                 double newLon = lon + x * offset;
 
                 dragStart = e.getPoint();
-                controller.display(newLat, newLon);
+                controller.Move(x, y);
             }
 
 

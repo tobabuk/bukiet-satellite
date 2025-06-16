@@ -6,9 +6,10 @@ import java.awt.image.BufferedImage;
 
 public class SatelliteView extends JComponent {
     private BufferedImage[][] images = new BufferedImage[3][3];
-    int offset = 300;
-    int xOffset = -getWidth() / 3;
-    int yOffset = -getHeight() / 3;
+    int widthHeight = 256;
+    int xOffset =0;
+    int yOffset = 0;
+
     //x, y offset - draw based off that
     //as you drag change offset
 
@@ -18,23 +19,19 @@ public class SatelliteView extends JComponent {
         repaint();
     }
 
-    public BufferedImage getImage(int row, int col) {
-
-        return images[row][col];
-    }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+
         g.translate(xOffset, yOffset);
         //offset for x and y
         //g.translate based on offset x and y
 
-
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
-                int x = col * offset;
-                int y = row * offset;
+                int x = col * widthHeight;
+                int y = row * widthHeight;
                 g.drawImage(images[row][col], x, y, null);
             }
         }
